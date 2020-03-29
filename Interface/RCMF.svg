@@ -1,0 +1,321 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260">
+
+	<style>
+
+		@keyframes AnimateR {
+
+			0% {
+
+				fill: rgba(118, 19, 200, 0.45);
+				stroke: #dcdcdc;
+
+			}
+
+			50% {
+
+				fill: rgba(59, 165, 198, 0.55);
+				stroke: #707d82;
+			}
+
+
+			100% {
+
+				fill: rgba(118, 19, 200, 0.45);
+				stroke: #707d82;
+			}
+
+		}
+
+		@keyframes AnimateT {
+
+			0% {
+
+				stroke: #000;
+			}
+
+			50% {
+				
+				stroke: #fff;
+
+			}
+
+			100% {
+				
+				stroke: #ffffffb0;
+			}
+
+		}
+
+		@keyframes AnimateF {
+
+			0% {
+
+				fill: rgba(255, 255, 255, 0.78);
+
+			}
+
+			50% {
+
+				fill: rgba(89, 89, 89, 0.45);
+
+			}
+
+			100% {
+
+				fill: rgba(255, 255, 255, 0.78);
+
+			}
+
+		}
+
+		@keyframes R {
+
+			0% {
+
+				transform: rotate(0deg) scale(1);
+
+			}
+
+			50% {
+
+				transform: rotate(360deg) scale(.7);
+
+			}
+
+			100% {
+
+				transform: rotate(0deg) scale(1);
+
+			}
+
+		}
+
+
+		@keyframes P {
+
+			0% {
+				transform: rotate(0);
+				fill: rgba(100, 100, 100, .4);
+				filter: drop-shadow( -.1vw 0 .1vw  rgba(0, 0, 0, .2));
+
+			}
+
+			50% {
+
+				transform: rotate(90deg);
+				fill: rgba(100, 100, 100, .1);
+				filter: drop-shadow( -.1vw -.1vw .05vw rgba(0, 0, 0, 1));
+
+			}
+
+			100% {
+
+				transform: rotate(45deg);
+				fill: rgba(100, 100, 100, .4);
+				filter: drop-shadow( .1vw 0 .1vw rgba(0, 0, 0, .2));
+			}
+
+		}
+
+		svg {
+
+			background: transparent;
+			padding: 1vw;
+			height: 13vw;
+			width: 12vw;
+
+			filter: drop-shadow( -.1vw -.1vw .05vw rgba(0, 0, 0, .7));
+
+			animation: R 8s ease-in-out infinite;
+
+		}
+
+		.R text.symb {
+
+			stroke-dasharray: 2;
+
+			stroke-width: 2;
+			stroke: #ffffffb0;
+			
+			font: bold 9vw sans-serif;
+			fill: rgba(118, 19, 200, 0.45);
+
+			filter: drop-shadow( -.1vw -.1vw .05vw rgba(0, 0, 0, .7));
+
+			animation: AnimateR 5s ease-in-out infinite;
+
+		}
+
+		.R text.info {
+
+			filter: drop-shadow( -.1vw 0 .1vw rgba(0, 0, 0, .5));
+
+			stroke-width: .2;
+			stroke: #606060;
+
+			font: normal 1vw Verdana;
+			fill: rgba(118, 19, 200, 0.45);
+
+			animation: AnimateF 3s ease-in-out infinite;
+
+		}
+
+		.R text.sense {
+
+			filter: drop-shadow( -.1vw 0 .1vw rgba(0, 0, 0, .5));
+
+			stroke-width: .2;
+			stroke: #606060;
+
+			font: normal 1.2vw sans-serif;
+			fill: rgba(118, 19, 200, 0.45);
+
+			animation: AnimateF 3s ease-in-out infinite;
+
+		}
+
+		.stop--1 {
+
+			animation: colors-1 2.5s infinite;
+
+		}
+
+		.stop--2 {
+
+			animation: colors-2 5s infinite;
+
+		}
+
+		.stop--3 {
+
+			animation: colors-3 7.5s infinite;
+
+		}
+
+		@keyframes colors-1 {
+
+			30% {
+
+				stop-color: #2b3b7580;
+
+			}
+
+			60% {
+
+				stop-color: #dcdcdc80;
+
+			}
+
+		}
+
+		@keyframes colors-2 {
+
+			30% {
+
+				stop-color: #dcdcdc80;
+
+			}
+
+			50% {
+
+				stop-color: #7181b280;
+
+			}
+
+		}
+
+		@keyframes colors-3 {
+
+			30% {
+
+				stop-color: #9aafb780;
+
+			}
+
+			60% {
+
+				stop-color: #dcdcdc80;
+
+			}
+
+		}
+
+		#pattern rect {
+
+			animation: P 6s ease-in-out infinite;
+
+		}
+
+		.R polygon.hexagon-2 {
+
+			stroke-dasharray: 5;
+
+			stroke-width: 1;
+			stroke: #707d82;
+
+			fill: url(#pattern);
+
+			animation: AnimateT 4s ease-in-out infinite;
+
+		}
+
+		.R polygon.hexagon-1 {
+
+			fill: url(#grad);
+
+		}
+
+	</style>
+
+	<title>RevolveR CMF</title>
+	<desc>RevolveR - Contents Management Framework with Sense.</desc>
+
+	<script>
+		console.log('[ RevolveR CMF ] :: Contents Management Framework with Sense.');
+		console.log('[ https://revolver.team ]');
+	</script>
+
+	<g class="logo">
+
+		<defs>
+
+			<pattern id="pattern" x="7" y="7" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+				<rect x="3" y="3" width="2" height="3" />
+			</pattern>
+
+			<pattern id="lines" viewBox="0 0 50 50" width="2" height="2" patternUnits="userSpaceOnUse">
+				<path stroke="#000" stroke-width="6" d="M0,50 50,0"></path>
+			</pattern>
+
+			<linearGradient id="grad">
+				<stop class="stop stop--1" stop-color="#a7c4dd80" offset="0"></stop>
+				<stop class="stop stop--2" stop-color="#9aafb780" offset="50%"></stop>
+				<stop class="stop stop--3" stop-color="#dcdcdc80" offset="100%"></stop>
+			</linearGradient>
+
+		</defs>
+
+		<g class="R">
+
+			<mask id="mask">
+				<rect width="100%" height="100%" fill="white"></rect>
+				<rect width="100%" height="100%" fill="url(#lines)"></rect>
+			</mask>
+
+			<g mask="url(#mask)">
+				<polygon class="hexagon-1" points="0, 186.26 107.264, 247.871 214.529, 186.26 214.529, 63.04 107.264,1.429 0, 63.04" />
+			</g>
+
+			<polygon class="hexagon-2" points="0, 186.26 107.264, 247.871 214.529, 186.26 214.529, 63.04 107.264,1.429 0, 63.04" />
+
+			<g class="logotype text">
+				<text class="symb" x="20%" y="70%">R</text>
+				<text class="info" x="12%" y="25%" writing-mode="tb">Framework</text>
+				<text class="sense" x="80%" y="35%" writing-mode="tb">Sense</text>
+			</g>
+
+		</g>
+
+	</g>
+
+</svg>

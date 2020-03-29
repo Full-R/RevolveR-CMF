@@ -1,0 +1,348 @@
+
+#
+# RevolveR CMF :: Access configuration
+#
+# v.1.9.0
+#
+#
+#                     ^
+#                    | |
+#                  @#####@
+#                (###   ###)-.
+#              .(###     ###) \
+#             /  (###   ###)   )
+#            (=-  .@#####@|_--"
+#            /\    \_|l|_/ (\
+#           (=-\     |l|    /
+#            \  \.___|l|___/
+#            /\      |_|   /
+#           (=-\._________/\
+#            \             /
+#              \._________/
+#                #  ----  #
+#                #   __   #
+#                \########/
+#
+#
+#
+# Developer: Dmitry Maltsev
+#
+# License: Apache 2.0
+#
+
+AddDefaultCharset utf-8
+
+# New protocol headers
+
+#php_flag cgi.rfc2616_headers Off
+
+# PCRE
+
+#php_value pcre.jit 1
+
+# Output buffering
+
+#php_value output_buffering 4092
+
+# Performance
+
+#php_value zlib.output_compression_level 9
+#php_value pcre.jit 1
+
+# Session lifetime 
+
+#php_value session.gc_maxlifetime 86400
+#php_value session.cookie_lifetime 86400
+
+# Start rewrite engine
+
+Options +FollowSymLinks
+
+RewriteEngine on
+
+RewriteBase /
+
+# From www to domain
+
+RewriteCond %{HTTP_HOST} ^www\.(.*)$
+
+RewriteRule ^(.*)$ http://%1/$1 [L,R=301]
+
+# Favicon to SVG
+RewriteRule /favicon.ico$ /interface/RCMF\.svg [L]
+
+<IfModule mod_headers.c>
+
+	Header set Strict-Transport-Security 'max-age=31536000'
+
+	Header set X-XSS-Protection '1; mode=block'
+
+	Header set X-Content-Type-Options 'nosniff'
+
+	Header set X-Frame-Options 'deny'
+
+	Header set Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; font-src 'self' data:"
+
+	Header set Referrer-Policy 'strict-origin'
+
+	Header set Feature-Policy "microphone 'none'; camera 'none';"
+
+</IfModule>
+
+# Secure private
+
+RewriteRule /?\.htaccess$ [F,L]
+
+# Block something
+
+RewriteCond %{REQUEST_METHOD} ^(TRACE|DELETE|TRACK) [NC]
+
+RewriteRule ^(.*)$ - [F]
+
+# Rules to block suspicious URIs
+
+RewriteCond %{QUERY_STRING} ^.*\.(bash|git|hg|log|svn|swp|cvs) [NC,OR]
+
+RewriteCond %{QUERY_STRING} ftp\: [NC,OR]
+
+RewriteCond %{QUERY_STRING} http\: [NC,OR]
+
+RewriteCond %{QUERY_STRING} https\: [NC,OR]
+
+RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+
+RewriteCond %{QUERY_STRING} ^.*(127\.0).* [NC,OR]
+
+RewriteCond %{QUERY_STRING} ^.*(globals|encode|localhost|loopback).* [NC,OR]
+
+RewriteCond %{QUERY_STRING} ^.*(request|concat|union|declare).* [NC]
+
+RewriteRule ^(.*)$ - [F]
+
+# Add slash
+
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteCond %{REQUEST_URI} /$ [NC]
+
+RewriteCond %{REQUEST_FILENAME} .*\.(png|jpg|gif|jpeg|webp|svg)$ [NC]
+
+RewriteRule ^(.*)/$ $1 [R=301,L]
+
+# Allow cache
+
+<IfModule mod_expires.c>
+
+	ExpiresActive On
+
+	ExpiresDefault 'access plus 5 month'
+
+	<IfModule mod_mime.c>
+
+		<IfModule mod_headers.c>
+
+			Header set Cache-Control 'private, must-revalidate, proxy-revalidate, max-age=1000800, no-transform, no-cache'
+
+			Header unset pragma
+
+		</IfModule>
+
+	</IfModule>
+
+	<FilesMatch .(jp?g|gif|png|webp|ico|css|js|es7)$>
+
+		Header set Cache-Control 'public, must-revalidate, proxy-revalidate, max-age=100800, no-transform'
+
+		Header set Access-Control-Allow-Methods 'GET'
+
+		Header set Access-Control-Allow-Origin '*'
+
+	</FilesMatch>
+
+</IfModule>
+
+# Allow compression
+
+<IfModule mod_deflate.c>
+
+	AddOutputFilter DEFLATE js es7 css
+
+	# Feed
+
+	AddOutputFilterByType DEFLATE application/atom+xml
+
+	AddOutputFilterByType DEFLATE application/xml
+
+	# Resources
+
+	AddOutputFilterByType DEFLATE application/ecmascript
+
+	AddOutputFilterByType DEFLATE image/svg+xml
+
+	AddOutputFilterByType DEFLATE text/plain
+
+	AddOutputFilterByType DEFLATE text/html
+
+	AddOutputFilterByType DEFLATE text/xml
+
+	AddOutputFilterByType DEFLATE text/css
+
+</IfModule>
+
+<ifModule mod_gzip.c>
+
+	mod_gzip_on Yes
+
+	mod_gzip_dechunk Yes
+
+	mod_gzip_add_header_count Yes
+
+	mod_gzip_handle_methods GET POST
+
+	mod_gzip_compression_level 9
+
+	mod_gzip_item_include file .(js|es7|css|x?html?|php|jpe?g|webp|png|svg)$
+
+	mod_gzip_item_include mime .?
+
+	mod_gzip_item_include mime ^text/.*
+
+	mod_gzip_item_include mime ^application/ecmascript.*
+
+	mod_gzip_item_exclude mime ^application/json.*
+
+	mod_gzip_item_exclude file \.(t?gz|zip)$
+
+	<IfModule mod_mime.c>
+
+		AddEncoding gzip .es7
+
+		AddEncoding gzip .js
+
+		AddEncoding gzip .css
+
+		AddEncoding gzip .jpg
+
+		AddEncoding gzip .jpeg
+
+		AddEncoding gzip .png
+
+		AddEncoding gzip .svg
+
+		AddEncoding gzip .webp
+
+	</IfModule>
+
+	SetEnv gzip
+
+	<IfModule mod_headers.c>
+
+		Header append Vary Accept-Encoding
+
+		Header append Vary User-Agent env=!dont-vary
+
+		Header append Content-Encoding gzip
+
+		AddDefaultCharset utf-8
+
+	</IfModule>
+
+</ifModule>
+
+# Block access to the kernel files
+
+<Files *.php>
+
+	Order Deny,Allow
+
+	Deny from all
+
+</Files>
+
+# Block access to cache files and databases
+
+<filesMatch \.(chunks|hash|cache|tcache|mmdb|cert|key)$>
+
+	Order Deny,Allow
+
+	Deny from all
+
+</filesMatch>
+
+# Allow main router
+
+<Files index.php>
+
+	Order Allow,Deny
+
+	Allow from all
+
+	<ifModule mod_gzip.c>
+
+		SetEnvIfNoCase mime text/html gzip=9 cache-enable=mem
+
+		AddDefaultCharset utf-8
+
+	</ifModule>
+
+</Files>
+
+<FilesMatch \.(css)$>
+
+	<ifModule mod_gzip.c>
+
+		SetEnvIfNoCase mime text/css gzip=9 cache-enable=mem
+
+		<IfModule mod_headers.c>
+
+			RequestHeader unset Cookie
+
+			Header unset Cookie
+
+			Header unset Set-Cookie
+
+		</IfModule>
+
+	</IfModule>
+
+	ForceType text/css
+
+</FilesMatch>
+
+<FilesMatch \.(es7|js)$>
+
+	<ifModule mod_gzip.c>
+
+		SetEnvIfNoCase mime application/ecmascript gzip=9 cache-enable=mem
+
+		<IfModule mod_headers.c>
+
+			RequestHeader unset Cookie
+
+			Header unset Cookie
+
+			Header unset Set-Cookie
+
+		</IfModule>
+
+	</IfModule>
+
+	ForceType application/ecmascript
+
+</FilesMatch>
+
+# Disable directory browsing
+
+Options All -Indexes
+
+# Rewrite conditions
+
+RewriteCond %{REQUEST_FILENAME} !-l
+
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite rule
+
+RewriteRule ^(.*)$ index.php [QSA,L]
